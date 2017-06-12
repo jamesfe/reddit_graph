@@ -1,0 +1,19 @@
+<html>
+<style>
+.blah {
+    fill: black;
+}
+</style>
+    <head>
+        <title>Donald Trump Post Count</title>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <!-- <script src="js/d3/d3.v2.js"></script> -->
+        <!-- taken from http://bl.ocks.org/benjchristensen/2579599 -->
+    </head>
+    <body>
+        <svg id="authorChart" width="1000" height="400"></svg>
+        <svg id="commentCount" width="1000" height="400"></svg>
+    </body>
+    <!-- we put this after the svg declaration so it can access the elements after the DOM creates them -->
+        <script src="./linegraph.js"></script>
+</html>
