@@ -1,3 +1,5 @@
+console.log("Loaded");
+
 function doAuthorGraph() {
   // some declarations
   var svg = d3.select("#authorChart"),
@@ -11,7 +13,7 @@ function doAuthorGraph() {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-  d3.json("../data/total_by_deleted.json", function(err, data) {
+  d3.json("../data/author_count_per_day.json", function(err, data) {
     if (err) throw err;
 
     data = data.authors_per_day;
@@ -39,7 +41,8 @@ function doAuthorGraph() {
         .attr("class", "blah")
         .attr("x", function(d) {
           d = d.date.split('-');
-          b = x(new Date(d[2], d[1], d[0])); return b; })
+          var b = x(new Date(d[2], d[1], d[0]));
+          return b; })
         .attr("y", function(d) { return y(d.value); } )
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - y(d.value); });

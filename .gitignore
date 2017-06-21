@@ -1,4 +1,5 @@
 .DS_Store
-data/*
+data/
 matplotlib/
 node_modules/
+public/dist/

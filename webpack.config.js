@@ -16,23 +16,29 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     publicPath: path.resolve(__dirname),
-    path: path.resolve(__dirname, 'public/dist')
+    path: path.resolve(__dirname, 'public', 'dist')
   },
   devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname)
   },
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+  },
   module: {
     loaders: [
       {
-        loader: "babel-loader",
+        loader: 'babel-loader',
 
         // Skip any files outside of your project's `src` directory
         include: [
-          path.resolve(__dirname, "src"),
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'public')
         ],
         exclude: [
-            path.resolve(__dirname, "node_modules"),
+            path.resolve(__dirname, 'node_modules'),
+            path.resolve(__dirname, 'public', 'dist'),
         ],
         // Only run `.js` and `.jsx` files through Babel
         test: /\.jsx?$/,
