@@ -1,4 +1,5 @@
-console.log("Loaded");
+
+
 
 function doAuthorGraph() {
   // some declarations
@@ -63,11 +64,8 @@ function doAuthorGraph() {
 
   });
 
-  console.log("Out of the handler");
+  console.log("Done making author graph");
 }
-
-doAuthorGraph();
-
 
 function doCensorshipGraph() {
 // some declarations
@@ -82,7 +80,7 @@ function doCensorshipGraph() {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-  d3.json("../data/author_count_per_day.json", function(err, data) {
+  d3.json("../data/total_by_deleted.json", function(err, data) {
     if (err) throw err;
 
     data = data.authors_per_day;
@@ -127,10 +125,13 @@ function doCensorshipGraph() {
         .attr("fill", "#000000")
         .text("Different Comment Authors");
 
-    console.log("Done");
+    console.log("Done w/ comments");
 
   });
 
-  console.log("Out of the deleted handler");
+  console.log("Done making deleted comments graph");
 }
 
+doAuthorGraph();
+doCensorshipGraph();
+// This will break things, but we will fix and develop against it.
