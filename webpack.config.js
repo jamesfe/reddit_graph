@@ -10,8 +10,7 @@ module.exports = {
 module.exports = {
   entry: [
     'babel-polyfill',
-    './src/linegraph.js',
-    'webpack-dev-server/client?http://localhost:8080'
+    './src/linegraph.js'
   ],
   output: {
     filename: 'bundle.js',
