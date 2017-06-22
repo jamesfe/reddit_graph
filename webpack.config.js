@@ -10,7 +10,7 @@ module.exports = {
 module.exports = {
   entry: [
     'babel-polyfill',
-    './src/linegraph.js'
+    './src/render_graphs.js'
   ],
   output: {
     filename: 'bundle.js',
