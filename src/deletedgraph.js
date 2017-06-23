@@ -5,7 +5,8 @@ function doDeletedGraph() {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([new Date(2016, 1, 1), new Date(2017, 5, 1)]).range([0, width]),
+  var x = d3.scaleTime().domain([new Date(2016, 1, 1), new Date(2017, 5, 1)]).range([1, width]),
+    badAxis = d3.scaleTime().domain([new Date(2015, 12, 1), new Date(2017, 4, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
@@ -24,11 +25,12 @@ function doDeletedGraph() {
     }
 
     var bandwidth = (width / newData.length) - 1;
-
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(badAxis));
+    // I don't know why we have to use the "bad axis" here but it seems d3 is off by 1 for axis labels.
+
 
    // Show all the comments, then next we will overlay this with the deleted values.
     g.selectAll(".blah")
