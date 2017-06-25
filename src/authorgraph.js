@@ -9,6 +9,7 @@ function doAuthorGraph() {
 
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([0, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
+  var scaleFromText = utils.dateFromStringWithScale(x);
 
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
@@ -39,10 +40,7 @@ function doAuthorGraph() {
       .enter()
       .append("rect")
         .attr("class", "blah")
-        .attr("x", function(d) {
-          d = d.date.split('-');
-          var b = x(utils.betterDate(d[2], d[1], d[0]));
-          return b; })
+        .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value); } )
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - y(d.value); });

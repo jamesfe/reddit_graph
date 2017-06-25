@@ -3,6 +3,15 @@ function betterDate(y, m, d) {
   return new Date(y, m-1, d);
 }
 
+function dateFromStringWithScale(x) {
+  return function(d) {
+    d = d.date.split('-');
+    var b = x(betterDate(d[2], d[1], d[0]));
+    return b;
+  }
+}
+
 module.exports = {
-  betterDate: betterDate
+  betterDate: betterDate,
+  dateFromStringWithScale: dateFromStringWithScale
 };

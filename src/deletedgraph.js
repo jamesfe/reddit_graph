@@ -11,6 +11,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
+  var scaleFromText = utils.dateFromStringWithScale(x);
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
@@ -55,10 +56,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
         .enter()
         .append("rect")
           .attr("class", "sampled")
-          .attr("x", function(d) {
-            d = d.date.split('-');
-            var b = x(utils.betterDate(d[2], d[1], d[0]));
-            return b; })
+          .attr("x", scaleFromText)
           .attr("y", calcPercent)
           .attr("width", bandwidth)
           .attr("height", function(d) { return height - calcPercent(d); } );
@@ -70,10 +68,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
       .enter()
       .append("rect")
         .attr("class", "deleted")
-        .attr("x", function(d) {
-          d = d.date.split('-');
-          var b = x(utils.betterDate(d[2], d[1], d[0]));
-          return b; })
+        .attr("x", scaleFromText)
         .attr("y", calcPercent)
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - calcPercent(d); } );
@@ -113,6 +108,8 @@ function doDeletedGraph() {
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
+  var scaleFromText = utils.dateFromStringWithScale(x);
+
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
@@ -142,10 +139,7 @@ function doDeletedGraph() {
       .enter()
       .append("rect")
         .attr("class", "blah")
-        .attr("x", function(d) {
-          d = d.date.split('-');
-          var b = x(utils.betterDate(d[2], d[1], d[0]));
-          return b; })
+        .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value.total); } )
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - y(d.value.total); });
@@ -156,10 +150,7 @@ function doDeletedGraph() {
       .enter()
       .append("rect")
         .attr("class", "deleted")
-        .attr("x", function(d) {
-          d = d.date.split('-');
-          var b = x(utils.betterDate(d[2], d[1], d[0]));
-          return b; })
+        .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value.total_deleted); } )
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - y(d.value.total_deleted); });
