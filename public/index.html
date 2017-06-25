@@ -5,7 +5,11 @@
 }
 .deleted {
     fill: red;
-}</style>
+}
+.sampled {
+  fill: green;
+}
+</style>
     <head>
         <title>Donald Trump Post Count</title>
         <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -15,6 +19,7 @@
     <body>
         <svg id="authorChart" width="1000" height="400"></svg>
         <svg id="commentCount" width="1000" height="400"></svg>
+        <svg id="deletedDonaldPercent" width="1000" height="400"></svg>
     </body>
     <!-- we put this after the svg declaration so it can access the elements after the DOM creates them -->
         <script src="./dist/bundle.js"></script>
