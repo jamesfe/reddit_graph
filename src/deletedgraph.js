@@ -1,3 +1,20 @@
+function betterDate(y, m, d) {
+  return new Date(y, m-1, d);
+}
+
+
+function doDeletedPercentGraph(targetId, dataFile, dates) {
+  /* Draw a deleted  percent graph on the target id with the given filename */
+  var svg = d3.select(targetId),
+    margin = {top: 20, right: 50,bottom: 20, left: 30},
+    width = svg.attr("width") - margin.left - margin.right,
+    height = svg.attr("height") - margin.top - margin.bottom;
+
+  var x = d3.scaleTime().domain([betterDate(2016, 1, 1), betterDate(2017, 5, 1)]).range([1, width]),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+
+}
+
 function doDeletedGraph() {
 // some declarations
   var svg = d3.select("#commentCount"),
@@ -5,8 +22,7 @@ function doDeletedGraph() {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([new Date(2016, 1, 1), new Date(2017, 5, 1)]).range([1, width]),
-    badAxis = d3.scaleTime().domain([new Date(2015, 12, 1), new Date(2017, 4, 1)]).range([1, width]),
+  var x = d3.scaleTime().domain([betterDate(2016, 1, 1), betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
@@ -28,7 +44,7 @@ function doDeletedGraph() {
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
-      .call(d3.axisBottom(badAxis));
+      .call(d3.axisBottom(x));
     // I don't know why we have to use the "bad axis" here but it seems d3 is off by 1 for axis labels.
 
 
@@ -40,7 +56,7 @@ function doDeletedGraph() {
         .attr("class", "blah")
         .attr("x", function(d) {
           d = d.date.split('-');
-          var b = x(new Date(d[2], d[1], d[0]));
+          var b = x(betterDate(d[2], d[1], d[0]));
           return b; })
         .attr("y", function(d) { return y(d.value.total); } )
         .attr("width", bandwidth)
@@ -54,7 +70,7 @@ function doDeletedGraph() {
         .attr("class", "deleted")
         .attr("x", function(d) {
           d = d.date.split('-');
-          var b = x(new Date(d[2], d[1], d[0]));
+          var b = x(betterDate(d[2], d[1], d[0]));
           return b; })
         .attr("y", function(d) { return y(d.value.total_deleted); } )
         .attr("width", bandwidth)
