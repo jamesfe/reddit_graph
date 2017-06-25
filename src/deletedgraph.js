@@ -1,6 +1,4 @@
-function betterDate(y, m, d) {
-  return new Date(y, m-1, d);
-}
+var utils = require('./utils');
 
 
 function doDeletedPercentGraph(targetId, dataFile, dates) {
@@ -10,7 +8,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([betterDate(2016, 1, 1), betterDate(2017, 5, 1)]).range([1, width]),
+  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
 }
@@ -22,7 +20,7 @@ function doDeletedGraph() {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([betterDate(2016, 1, 1), betterDate(2017, 5, 1)]).range([1, width]),
+  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
@@ -56,7 +54,7 @@ function doDeletedGraph() {
         .attr("class", "blah")
         .attr("x", function(d) {
           d = d.date.split('-');
-          var b = x(betterDate(d[2], d[1], d[0]));
+          var b = x(utils.betterDate(d[2], d[1], d[0]));
           return b; })
         .attr("y", function(d) { return y(d.value.total); } )
         .attr("width", bandwidth)
@@ -70,7 +68,7 @@ function doDeletedGraph() {
         .attr("class", "deleted")
         .attr("x", function(d) {
           d = d.date.split('-');
-          var b = x(betterDate(d[2], d[1], d[0]));
+          var b = x(utils.betterDate(d[2], d[1], d[0]));
           return b; })
         .attr("y", function(d) { return y(d.value.total_deleted); } )
         .attr("width", bandwidth)

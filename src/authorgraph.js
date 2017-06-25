@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 function doAuthorGraph() {
   // some declarations
   var svg = d3.select("#authorChart"),
@@ -5,8 +7,7 @@ function doAuthorGraph() {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([new Date(2016, 1, 1), new Date(2017, 5, 1)]).range([0, width]),
-    badAxis = d3.scaleTime().domain([new Date(2015, 12, 1), new Date(2017, 4, 1)]).range([1, width]),
+  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([0, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
@@ -30,7 +31,7 @@ function doAuthorGraph() {
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
-      .call(d3.axisBottom(badAxis));
+      .call(d3.axisBottom(x));
 
    // Data
     g.selectAll(".blah")
@@ -40,7 +41,7 @@ function doAuthorGraph() {
         .attr("class", "blah")
         .attr("x", function(d) {
           d = d.date.split('-');
-          var b = x(new Date(d[2], d[1], d[0]));
+          var b = x(utils.betterDate(d[2], d[1], d[0]));
           return b; })
         .attr("y", function(d) { return y(d.value); } )
         .attr("width", bandwidth)
