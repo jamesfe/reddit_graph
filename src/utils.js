@@ -8,7 +8,7 @@ function dateFromStringWithScale(x) {
     d = d.date.split('-');
     var b = x(betterDate(d[2], d[1], d[0]));
     return b;
-  }
+  };
 }
 
 module.exports = {

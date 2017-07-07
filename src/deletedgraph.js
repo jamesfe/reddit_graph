@@ -24,7 +24,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
   d3.json(dataFile, function(err, data) {
     if (err) throw err;
 
-    var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }))
+    var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }));
     // debugger;
     y.domain([0, max]); // this is for percentages now
 
@@ -91,7 +91,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
         .attr("text-anchor", "end")
         .attr("font-size", "14")
         .attr("y", -6)
-        .attr("fill", "#000000")
+        .attr("fill", "#000000");
   });
 
   console.log("Done making deleted percentage graph");
