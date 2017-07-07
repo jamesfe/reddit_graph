@@ -26,6 +26,14 @@ module.exports = {
     poll: 1000
   },
   module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        enforce: "post",
+        loader: "jshint-loader"
+      }
+    ],
     loaders: [
       {
         loader: 'babel-loader',
