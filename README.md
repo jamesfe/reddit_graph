@@ -12,8 +12,6 @@ npm start
 # now visit http://localhost:8080/webpack-dev-server/
 ```
 
-I need to fix the webpack compilation/watching/server thing but haven't gotten to it yet.
-
 # Contact Me
 
 Twitter: [@jimmysthoughts](https://twitter.com/jimmysthoughts)
