@@ -99,7 +99,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
 }
 
 function doDeletedGraph() {
-// some declarations
+  // some declarations
   var svg = d3.select("#commentCount"),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
@@ -175,6 +175,7 @@ function doDeletedGraph() {
 }
 
 function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
+
   /* Draw a deleted  percent graph on the target id with the given filename */
   var svg = d3.select(targetId),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
@@ -187,8 +188,6 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
   var scaleFromText = utils.dateFromWeekStringWithScale(x);
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
-
-  var sampleFile = "../data/sampled_deleted_posts.json";
 
   function calcPercent(d) {
     return y(d.value.total_deleted / d.value.total * 100);
@@ -214,27 +213,6 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
        // now we write some deleted bars on top
-  // ------------------------------------------------------------
-    d3.json(sampleFile, function(err, data) {
-
-      var sampleData = [];
-      for (var key in data) {
-        if(data.hasOwnProperty(key)) {
-          sampleData.push({"date": key, "value": data[key]});
-        }
-      }
-
-      g.selectAll(".sampled")
-        .data(sampleData)
-        .enter()
-        .append("rect")
-          .attr("class", "sampled")
-          .attr("x", scaleFromText)
-          .attr("y", calcPercent)
-          .attr("width", bandwidth)
-          .attr("height", function(d) { return height - calcPercent(d); } );
-    });
-  // ------------------------------------------------------------
 
     g.selectAll(".deleted")
       .data(newData)
