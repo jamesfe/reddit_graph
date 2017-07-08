@@ -30,7 +30,7 @@ module.exports = {
       {
         loader: 'babel-loader',
 
-        // Skip any files outside of your project's `src` directory
+        // Skip any files outside of your project's `src` and `public` directory
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve(__dirname, 'public')
