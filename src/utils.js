@@ -24,16 +24,23 @@ function getDateOfISOWeek(w, y) {
     return ISOweekStart;
 }
 
+function dateFromWeekString(d) {
+  /* Given a WW-YYYY return a date object */
+  d = d.split('-').map(function(blah) { return parseInt(blah); });
+  return getDateOfISOWeek(d[0], d[1]);
+}
+
 function dateFromWeekStringWithScale(x) {
   /* Create a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
-    d = d.date.split('-');
-    return x(getDateOfISOWeek(d[1], d[0]));
+    d = d.date.split('-').map(function(blah) { return parseInt(blah); });
+    return x(getDateOfISOWeek(d[0], d[1]));
   }
 }
 
 module.exports = {
   betterDate: betterDate,
   dateFromStringWithScale: dateFromStringWithScale,
-  dateFromWeekStringWithScale: dateFromWeekStringWithScale
+  dateFromWeekStringWithScale: dateFromWeekStringWithScale,
+  dateFromWeekString: dateFromWeekString
 };

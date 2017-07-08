@@ -25,7 +25,6 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
     if (err) throw err;
 
     var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }))
-    // debugger;
     y.domain([0, max]); // this is for percentages now
 
     var newData = [];
@@ -185,7 +184,6 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
-  var scaleFromText = utils.dateFromWeekStringWithScale(x);
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
@@ -197,28 +195,33 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
     if (err) throw err;
 
     var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }))
-    // debugger;
     y.domain([0, max]); // this is for percentages now
 
+    // Somewhere around here I should throw away data outside the boundaries of my scale
+    // Otherwise we can have junky looking graphs.
     var newData = [];
     for (var key in data) {
       if(data.hasOwnProperty(key)) {
         newData.push({"date": key, "value": data[key]});
       }
     }
+    var extents = d3.extent(newData, function(d) { return utils.dateFromWeekString(d.date); })
+    extents[1] = extents[1].getTime() + (7 * 3600 * 24 * 1000); // add a week as buffer
+    x.domain(extents);
+    var scaleFromText = utils.dateFromWeekStringWithScale(x);
 
     var bandwidth = (width / newData.length) - 1;
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
-       // now we write some deleted bars on top
 
+    // now we write some deleted bars on top
     g.selectAll(".deleted")
       .data(newData)
       .enter()
       .append("rect")
-        .attr("class", "deleted")
+        .attr("class", "deleted") // TODO: Remove this horrid class
         .attr("x", scaleFromText)
         .attr("y", calcPercent)
         .attr("width", bandwidth)
@@ -230,8 +233,9 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("font-size", "20")
         .attr("text-anchor", "beginning")
         .attr("font-family", "sans-serif")
-        .attr("font-weight", "bold")
-        .text("Deleted Comments: Randomly Sampled (green) vs r/The_Donald/ (red)");
+        .attr("font-weight", "bold");
+        // .text("Deleted Comments: Randomly Sampled (green) vs r/The_Donald/ (red)");
+    // TODO fix label
 
     // Y Axis
     g.append("g")
@@ -245,8 +249,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("fill", "#000000")
   });
 
-  console.log("Done making deleted percentage graph");
-
+  console.log("Finished with weekly graph");
 }
 
 
