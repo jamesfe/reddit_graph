@@ -6,6 +6,7 @@ function betterDate(y, m, d) {
 function dateFromStringWithScale(x) {
   /* Create a function that transforms dates in form DD-MM-YYYY -> scaled values */
   return function(d) {
+    if (typeof(d) != "string") { throw "not a string"; }
     d = d.date.split('-');
     var b = x(betterDate(d[2], d[1], d[0]));
     return b;
@@ -26,6 +27,7 @@ function getDateOfISOWeek(w, y) {
 
 function dateFromWeekString(d) {
   /* Given a WW-YYYY return a date object */
+  if (typeof(d) != "string") { throw "not a string"; }
   d = d.split('-').map(function(blah) { return parseInt(blah); });
   return getDateOfISOWeek(d[0], d[1]);
 }
@@ -33,6 +35,7 @@ function dateFromWeekString(d) {
 function dateFromWeekStringWithScale(x) {
   /* Create a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
+    if (typeof(d) != "string") { throw "not a string"; }
     d = d.date.split('-').map(function(blah) { return parseInt(blah); });
     return x(getDateOfISOWeek(d[0], d[1]));
   }

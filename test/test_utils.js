@@ -21,5 +21,21 @@ describe('Utils', function() {
     });
   });
 
+  describe('dateFromWeekString tests', function() {
+    it('should return a date', function() {
+      var result = utils.dateFromWeekString('9-2017');
+      assert.equal(typeof(result), 'object');
+      assert.equal(result instanceof Date, true);
+    });
+
+    it('should take only a string', function() {
+      assert.throws(
+        () => {
+          utils.dateFromWeekString(1);
+        },
+        "not a string"
+      );
+    });
+  });
 });
 
