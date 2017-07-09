@@ -19,7 +19,7 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname)
+    contentBase: path.resolve(__dirname, 'public')
   },
   watchOptions: {
     aggregateTimeout: 300,
@@ -38,7 +38,7 @@ module.exports = {
       {
         loader: 'babel-loader',
 
-        // Skip any files outside of your project's `src` directory
+        // Skip any files outside of your project's `src` and `public` directory
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve(__dirname, 'public')
