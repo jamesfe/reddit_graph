@@ -245,7 +245,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("font-size", "14")
         .attr("y", -6)
         .attr("fill", "#000000")
-        .text("Percent of Comments Deleted");
+        .text("Comments Deleted");
   });
 
   console.log("Finished with weekly graph");
