@@ -174,7 +174,6 @@ function doDeletedGraph() {
 }
 
 function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
-
   /* Draw a deleted  percent graph on the target id with the given filename */
   var svg = d3.select(targetId),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
@@ -221,7 +220,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
       .data(newData)
       .enter()
       .append("rect")
-        .attr("class", "deleted") // TODO: Remove this horrid class
+        .attr("class", "deleted_weekly")
         .attr("x", scaleFromText)
         .attr("y", calcPercent)
         .attr("width", bandwidth)
@@ -233,9 +232,8 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("font-size", "20")
         .attr("text-anchor", "beginning")
         .attr("font-family", "sans-serif")
-        .attr("font-weight", "bold");
-        // .text("Deleted Comments: Randomly Sampled (green) vs r/The_Donald/ (red)");
-    // TODO fix label
+        .attr("font-weight", "bold")
+        .text("Deleted Comments by Week: Percentage of Comments Deleted in /r/The_Donald");
 
     // Y Axis
     g.append("g")
@@ -247,6 +245,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("font-size", "14")
         .attr("y", -6)
         .attr("fill", "#000000")
+        .text("Percent of Comments Deleted");
   });
 
   console.log("Finished with weekly graph");
