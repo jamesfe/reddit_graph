@@ -19,7 +19,7 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'public')
+    contentBase: path.resolve(__dirname)
   },
   watchOptions: {
     aggregateTimeout: 300,

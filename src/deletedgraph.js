@@ -193,7 +193,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
   d3.json(dataFile, function(err, data) {
     if (err) throw err;
 
-    var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }))
+    var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }));
     y.domain([0, max]); // this is for percentages now
 
     // Somewhere around here I should throw away data outside the boundaries of my scale
@@ -204,7 +204,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         newData.push({"date": key, "value": data[key]});
       }
     }
-    var extents = d3.extent(newData, function(d) { return utils.dateFromWeekString(d.date); })
+    var extents = d3.extent(newData, function(d) { return utils.dateFromWeekString(d.date); });
     extents[1] = extents[1].getTime() + (7 * 3600 * 24 * 1000); // add a week as buffer
     x.domain(extents);
     var scaleFromText = utils.dateFromWeekStringWithScale(x);
