@@ -72,15 +72,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - calcPercent(d); } );
 
-    g.append("g")
-      .attr("transform", "translate(0, " + margin.top + ")")
-      .append("text")
-        .attr("font-size", "20")
-        .attr("text-anchor", "beginning")
-        .attr("font-family", "sans-serif")
-        .attr("font-weight", "bold")
-        .text("Deleted Comments: Randomly Sampled (green) vs r/The_Donald/ (red)");
-
+    utils.boldGraphTitle(g, "Deleted Comments: Randomly Sampled (green) vs r/The_Donald/ (red)", margin);
     // Y Axis
     g.append("g")
       .attr("transform", "translate(" + width + ", 0)")
@@ -225,15 +217,6 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - calcPercent(d); } );
 
-    g.append("g")
-      .attr("transform", "translate(0, " + margin.top + ")")
-      .append("text")
-        .attr("font-size", "20")
-        .attr("text-anchor", "beginning")
-        .attr("font-family", "sans-serif")
-        .attr("font-weight", "bold")
-        .text("Deleted Comments by Week: Percentage of Comments Deleted in /r/The_Donald");
-
     // Y Axis
     g.append("g")
       .attr("transform", "translate(" + width + ", 0)")
@@ -245,6 +228,8 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         .attr("y", -6)
         .attr("fill", "#000000")
         .text("Comments Deleted");
+
+    utils.boldGraphTitle(g, "Deleted Comments by Week: Percentage of Comments Deleted in /r/The_Donald", margin);
   });
 
   console.log("Finished with weekly graph");

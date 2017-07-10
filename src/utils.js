@@ -55,6 +55,19 @@ function compareDates(keyA, keyB){
   return 0;
 }
 
+  function boldGraphTitle(svgThing, text, margin) {
+  /* Add a generic bold title to the target element */
+  svgThing.append("g")
+    .attr("transform", "translate(0, " + margin.top + ")")
+    .append("text")
+      .attr("font-size", "20")
+      .attr("text-anchor", "beginning")
+      .attr("font-family", "sans-serif")
+      .attr("font-weight", "bold")
+      .text(text);
+  return svgThing;
+}
+
 module.exports = {
   betterDate: betterDate,
   dateFromStringWithScale: dateFromStringWithScale,
@@ -62,4 +75,5 @@ module.exports = {
   dateFromWeekString: dateFromWeekString,
   compareDates: compareDates,
   compareDTDates: compareDTDates
+  boldGraphTitle: boldGraphTitle
 };
