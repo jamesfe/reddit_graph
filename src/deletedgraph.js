@@ -108,7 +108,6 @@ function doDeletedGraph() {
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var scaleFromText = utils.dateFromStringWithScale(x);
-
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
