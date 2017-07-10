@@ -238,7 +238,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
     // Y Axis
     g.append("g")
       .attr("transform", "translate(" + width + ", 0)")
-      .call(d3.axisRight(y).tickFormat(d => d + '%'))
+      .call(d3.axisRight(y).tickFormat(function(d) { return d + '%'; }))
       .append("text")
         .attr("transform", "rotate(270)")
         .attr("text-anchor", "end")
