@@ -14,24 +14,6 @@ function renderDeletedLineGraph(targetElement, dataFile) {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-  // TODO: Move this to it's end-use area
-  function calcPercent(d) {
-    return y(d.value.total_deleted / d.value.total * 100);
-  }
-
-  // TODO: Refactor to utils
-  function compareDates(a, b){
-  /* From https://stackoverflow.com/a/8837511/974864
-   * TODO: Needs Testing
-   * */
-    var keyA = new Date(a.datetime),
-        keyB = new Date(b.datetime);
-    // Compare the 2 dates
-    if(keyA < keyB) return -1;
-    if(keyA > keyB) return 1;
-    return 0;
-  }
-
   d3.json(dataFile, function(err, data) {
     // Here we have a file with multiple streams of data - we should iterate over each one we want to show and display it.
     if (err) throw err;
@@ -76,7 +58,7 @@ function renderDeletedLineGraph(targetElement, dataFile) {
           }
         }
         // Sort the array by the date value
-        streams[key].sort(compareDates);
+        streams[key].sort(utils.compareDTDates);
       }
     }
 

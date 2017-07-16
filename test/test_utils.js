@@ -37,5 +37,21 @@ describe('Utils', function() {
       );
     });
   });
+
+  describe('compareDates tests', function() {
+    it('should return -1 when first date happens earlier', function() {
+      assert.equal(-1, utils.compareDates(new Date(2017, 6, 1), new Date(2019, 6, 1)));
+    });
+
+    it('should return 1 when second date happens earlier', function() {
+      assert.equal(1, utils.compareDates(new Date(2019, 6, 1), new Date(2017, 6, 1)));
+    });
+
+    it('should return 0 when dates are equal', function() {
+      assert.equal(0, utils.compareDates(new Date(2019, 6, 1), new Date(2019, 6, 1)));
+    });
+
+  });
+
 });
 
