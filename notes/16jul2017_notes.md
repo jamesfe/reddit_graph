@@ -10,12 +10,14 @@ Another thing I need to do is split this out into different divisions: some grap
 
 ## TO DO
 
-*Features*
- [ ] Add mouse-over detection
- [ ] Re-render individual lines on demand
- [ ] Maybe something for `reddit_stats` but divide graphs by reddit types
+**Features**
 
-*Maintenance*
- [ ] Look over code for opportunities to refactor
- [ ] Check all functions for unit tests
- [ ] Related: Spike on code coverage for JavaScript tests
+- [ ] Add mouse-over detection
+- [ ] Re-render individual lines on demand
+- [ ] Maybe something for `reddit_stats` but divide graphs by reddit types
+
+**Maintenance**
+
+- [ ] Look over code for opportunities to refactor
+- [ ] Check all functions for unit tests
+- [ ] Related: Spike on code coverage for JavaScript tests
