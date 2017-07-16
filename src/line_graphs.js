@@ -8,8 +8,9 @@ function renderDeletedLineGraph(targetElement, dataFile) {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().range([1, width]), // TODO: Change domain dynamically
-    y = d3.scaleLinear().rangeRound([height, 0]); // We will change the domain for this later.
+  /* We set the domains for both of these once we know more about the data. */
+  var x = d3.scaleTime().range([1, width]);
+  var y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
@@ -20,16 +21,58 @@ function renderDeletedLineGraph(targetElement, dataFile) {
   }
 
   d3.json(dataFile, function(err, data) {
-    // Here we have a file with multiple streams of data - we should iterate over each one we want to show and display it. 
+    // Here we have a file with multiple streams of data - we should iterate over each one we want to show and display it.
     if (err) throw err;
+    if (data.reddits !== undefined) { data = data.reddits; }
+    else { throw 'no reddit data.'; }
+    /* We have here the goal of loading the big JSON file and creating various streams of data.
+     * The data file is a set of dicts like so: "reddits" => subreddits => "dates" => [WW-YYYY] => [obj]
+     * Where OBJ looks like {total: x+y, total_deleted: x, total_not_delted: y}
+     *
+     * What we want is:
+     * [reddits] => [date, value]
+     * */
 
+    // TODO: Refactor to function, write some unit tests.
+    var streams = {};
+    debugger;
+    for (var key in data) {
+      if (data.hasOwnProperty(key)) {
+        // if this thing has a key like so:
+        streams[key] = [];
+        for (var dateString in data[key].dates) {
+          if (data[key].dates.hasOwnProperty(dateString)) {
+            // Convert the dateString to a meaningful one
+            // Convert the data into a percentage
+            var obj = data[key].dates[dateString];
+            streams[key].push({
+              datetime: utils.dateFromWeekString(dateString),
+              percentDeleted: (obj.total_deleted / obj.total) * 100;
+            });
+          }
+        }
+        // Sort the array by the date value
+        streams[key].sort(function(a, b){
+          /* From https://stackoverflow.com/a/8837511/974864
+           * TODO: Needs Testing
+           * */
+            var keyA = new Date(a.datetime),
+                keyB = new Date(b.datetime);
+            // Compare the 2 dates
+            if(keyA < keyB) return -1;
+            if(keyA > keyB) return 1;
+            return 0;
+        });
+      }
+    }
+    /*
     var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }));
     y.domain([0, max]); // this is for percentages now
 
     // Somewhere around here I should throw away data outside the boundaries of my scale
     // Otherwise we can have junky looking graphs.
     var newData = [];
-    for (var key in data) {
+    for (key in data) {
       if(data.hasOwnProperty(key)) {
         newData.push({"date": key, "value": data[key]});
       }
@@ -44,7 +87,9 @@ function renderDeletedLineGraph(targetElement, dataFile) {
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
+*/
 
+    /*
     // now we write some deleted bars on top
     g.selectAll(".deleted")
       .data(newData)
@@ -55,7 +100,9 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .attr("y", calcPercent)
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - calcPercent(d); } );
+    */
 
+    // Put a nice title on the graph
     g.append("g")
       .attr("transform", "translate(0, " + margin.top + ")")
       .append("text")
@@ -63,7 +110,7 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .attr("text-anchor", "beginning")
         .attr("font-family", "sans-serif")
         .attr("font-weight", "bold")
-        .text("Deleted Comments by Week: Percentage of Comments Deleted in /r/The_Donald");
+        .text("Proportions of Deleted Comments by Week");
 
     // Y Axis
     g.append("g")
@@ -75,7 +122,7 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .attr("font-size", "14")
         .attr("y", -6)
         .attr("fill", "#000000")
-        .text("Comments Deleted");
+        .text("Percent Comments Deleted");
 
   });
 

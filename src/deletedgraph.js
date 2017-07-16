@@ -255,6 +255,5 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
 module.exports = {
   renderDeletedGraph: doDeletedGraph,
   renderDeletedPercentGraph: doDeletedPercentGraph,
-  doDeletedPercentGraphByWeek: doDeletedPercentGraphByWeek,
-  renderDeletedLineGraph: renderDeletedLineGraph
+  doDeletedPercentGraphByWeek: doDeletedPercentGraphByWeek
 };
