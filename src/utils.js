@@ -4,7 +4,7 @@ function betterDate(y, m, d) {
 }
 
 function dateFromStringWithScale(x) {
-  /* Create a function that transforms dates in form DD-MM-YYYY -> scaled values */
+  /* Return a function that transforms dates in form DD-MM-YYYY -> scaled values */
   return function(d) {
     if (typeof(d.date) != "string") { throw "not a string"; }
     d = d.date.split('-');
@@ -33,7 +33,7 @@ function dateFromWeekString(d) {
 }
 
 function dateFromWeekStringWithScale(x) {
-  /* Create a function that transforms dates in form WW-YYYY -> scaled values */
+  /* Return a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
     if (typeof(d.date) != "string") { throw "not a string"; }
     d = d.date.split('-').map(function(blah) { return parseInt(blah); });
@@ -42,9 +42,24 @@ function dateFromWeekStringWithScale(x) {
 
 }
 
+function compareDTDates(c, d) {
+  /* Helper func. to access things. */
+  return compareDates(new Date(c.datetime), new Date(d.datetime));
+}
+
+function compareDates(keyA, keyB){
+  /* From https://stackoverflow.com/a/8837511/974864 */
+  // Compare the 2 dates
+  if(keyA < keyB) return -1;
+  if(keyA > keyB) return 1;
+  return 0;
+}
+
 module.exports = {
   betterDate: betterDate,
   dateFromStringWithScale: dateFromStringWithScale,
   dateFromWeekStringWithScale: dateFromWeekStringWithScale,
-  dateFromWeekString: dateFromWeekString
+  dateFromWeekString: dateFromWeekString,
+  compareDates: compareDates,
+  compareDTDates: compareDTDates
 };
