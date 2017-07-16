@@ -1,4 +1,3 @@
-
 var utils = require('./utils');
 
 function renderDeletedLineGraph(targetElement, dataFile) {
@@ -20,6 +19,19 @@ function renderDeletedLineGraph(targetElement, dataFile) {
     return y(d.value.total_deleted / d.value.total * 100);
   }
 
+  // TODO: Refactor to utils
+  function compareDates(a, b){
+  /* From https://stackoverflow.com/a/8837511/974864
+   * TODO: Needs Testing
+   * */
+    var keyA = new Date(a.datetime),
+        keyB = new Date(b.datetime);
+    // Compare the 2 dates
+    if(keyA < keyB) return -1;
+    if(keyA > keyB) return 1;
+    return 0;
+  }
+
   d3.json(dataFile, function(err, data) {
     // Here we have a file with multiple streams of data - we should iterate over each one we want to show and display it.
     if (err) throw err;
@@ -35,74 +47,62 @@ function renderDeletedLineGraph(targetElement, dataFile) {
 
     // TODO: Refactor to function, write some unit tests.
     var streams = {};
-    debugger;
+    var maxPercent = 0,
+      minPercent = 100,
+      maxDate = new Date(2000, 0, 1),
+      minDate = new Date(2020, 0, 1),
+      reddits = [];
+
     for (var key in data) {
       if (data.hasOwnProperty(key)) {
         // if this thing has a key like so:
+        reddits.push(key);
         streams[key] = [];
         for (var dateString in data[key].dates) {
           if (data[key].dates.hasOwnProperty(dateString)) {
             // Convert the dateString to a meaningful one
             // Convert the data into a percentage
             var obj = data[key].dates[dateString];
+            var dt = utils.dateFromWeekString(dateString);
+            var pct = (obj.total_deleted / obj.total) * 100;
+            if (dt < minDate) { minDate = dt; }
+            else if (dt > maxDate) { maxDate = dt; }
+            if (pct < minPercent) { minPercent = pct; }
+            else if (pct > maxPercent) { maxPercent = pct; }
             streams[key].push({
-              datetime: utils.dateFromWeekString(dateString),
-              percentDeleted: (obj.total_deleted / obj.total) * 100;
+              datetime: dt,
+              percentDeleted: pct
             });
           }
         }
         // Sort the array by the date value
-        streams[key].sort(function(a, b){
-          /* From https://stackoverflow.com/a/8837511/974864
-           * TODO: Needs Testing
-           * */
-            var keyA = new Date(a.datetime),
-                keyB = new Date(b.datetime);
-            // Compare the 2 dates
-            if(keyA < keyB) return -1;
-            if(keyA > keyB) return 1;
-            return 0;
-        });
+        streams[key].sort(compareDates);
       }
     }
-    /*
-    var max = d3.max(Object.values(data).map(function(c) { return (c.total_deleted/c.total * 100) + 4; }));
-    y.domain([0, max]); // this is for percentages now
 
-    // Somewhere around here I should throw away data outside the boundaries of my scale
-    // Otherwise we can have junky looking graphs.
-    var newData = [];
-    for (key in data) {
-      if(data.hasOwnProperty(key)) {
-        newData.push({"date": key, "value": data[key]});
-      }
-    }
-    var extents = d3.extent(newData, function(d) { return utils.dateFromWeekString(d.date); });
-    extents[1] = extents[1].getTime() + (7 * 3600 * 24 * 1000); // add a week as buffer
-    x.domain(extents);
-    var scaleFromText = utils.dateFromWeekStringWithScale(x);
+    y.domain([0, maxPercent]);
+    x.domain([minDate, maxDate]);
 
-    var bandwidth = (width / newData.length) - 1;
+    var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
-*/
 
-    /*
-    // now we write some deleted bars on top
-    g.selectAll(".deleted")
-      .data(newData)
-      .enter()
-      .append("rect")
-        .attr("class", "deleted_weekly")
-        .attr("x", scaleFromText)
-        .attr("y", calcPercent)
-        .attr("width", bandwidth)
-        .attr("height", function(d) { return height - calcPercent(d); } );
-    */
+    var vline = d3.line()
+      .x(function(d) { return x(d.datetime); })
+      .y(function(d) { return y(d.percentDeleted); });
 
-    // Put a nice title on the graph
+    for (var i = 0; i < reddits.length; i++) {
+      g.append("path")
+        .data([streams[reddits[i]]])
+        .attr("class", "line")
+        .attr("d", vline)
+        .style("stroke", colorScale(i % 20));
+    }
+
+    // Put a title on the graph
     g.append("g")
       .attr("transform", "translate(0, " + margin.top + ")")
       .append("text")
@@ -123,9 +123,7 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .attr("y", -6)
         .attr("fill", "#000000")
         .text("Percent Comments Deleted");
-
   });
-
 }
 
 module.exports = {

@@ -4,7 +4,7 @@ function betterDate(y, m, d) {
 }
 
 function dateFromStringWithScale(x) {
-  /* Create a function that transforms dates in form DD-MM-YYYY -> scaled values */
+  /* Return a function that transforms dates in form DD-MM-YYYY -> scaled values */
   return function(d) {
     if (typeof(d.date) != "string") { throw "not a string"; }
     d = d.date.split('-');
@@ -33,7 +33,7 @@ function dateFromWeekString(d) {
 }
 
 function dateFromWeekStringWithScale(x) {
-  /* Create a function that transforms dates in form WW-YYYY -> scaled values */
+  /* Return a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
     if (typeof(d.date) != "string") { throw "not a string"; }
     d = d.date.split('-').map(function(blah) { return parseInt(blah); });
