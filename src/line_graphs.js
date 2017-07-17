@@ -62,8 +62,16 @@ function renderDeletedLineGraph(targetElement, dataFile) {
       }
     }
 
+    // To enable us to come back to this data later.
+    window.vdata = {};
+    window.vdata.streams = streams;
+    window.vdata.reddits = reddits;
+
     y.domain([0, maxPercent]);
     x.domain([minDate, maxDate]);
+
+    window.vdata.x = x;
+    window.vdata.y = y;
 
     var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -81,7 +89,9 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .data([streams[reddits[i]]])
         .attr("class", "line")
         .attr("d", vline)
-        .style("stroke", colorScale(i % 20));
+        .attr("id", "_"+reddits[i])
+        .style("stroke", colorScale(i % 20))
+        .style("opacity", "0.5");
     }
 
     // Put a title on the graph
