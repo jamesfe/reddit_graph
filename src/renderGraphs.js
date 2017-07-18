@@ -2,7 +2,7 @@
 
 var authorGraph = require('./authorgraph');
 var deletedGraph = require('./deletedgraph');
-var lineGraphs = require('./line_graphs');
+var lineGraphs = require('./lineGraphs');
 
 authorGraph.renderAuthorGraph();
 deletedGraph.renderDeletedGraph();
@@ -12,32 +12,46 @@ deletedGraph.doDeletedPercentGraphByWeek('#deletedDonaldPercentWeek', '../data/d
 lineGraphs.renderDeletedLineGraph('#bigLineGraph', '../data/top_100_subreddits_deleted_by_week.json');
 
 function drawDeletedLine(redditName, color) {
-  var vline = d3.line()
-    .x(function(d) { return window.vdata.x(d.datetime); })
-    .y(function(d) { return window.vdata.y(d.percentDeleted); });
-
+  /* Draw a thicker, more visible line on top when the mouse is over.. */
   d3.select("#bigLineGraph")
     .select("g")
       .append("path")
         .data([window.vdata.streams[redditName]])
         .attr("class", "line")
-        .attr("d", vline)
+        .attr("d", window.vdata.vline)
         .attr("id", "_temp_" + redditName)
         .style("stroke-width", 5)
         .style("stroke", color);
 }
 
-/* Line graph is rendered, let's create hooks for all the lines. */
+function drawSubLabel(rName, color) {
+  /* Put a label out there with the name of the subreddit. */
+  d3.select("#bigLineGraph")
+    .select("g")
+    .append("text")
+      .attr("id", "subLabel")
+      .attr("transform", "translate(0, 50)")
+      .attr("font-size", "20")
+      .attr("text-anchor", "beginning")
+      .attr("font-family", "sans-serif")
+      .attr("font-weight", "bold")
+      .style("fill", color)
+      .text(rName);
+}
+
 function lineMouseOver() {
+  /* Draw a bold line and label the highlighted segment. */
   var target = this.id.slice(1, this.id.length);
   drawDeletedLine(target, this.style.stroke);
+  drawSubLabel(target, this.style.stroke);
 }
 
 function lineMouseOut() {
+  /* When the mouse leaves, we delete the elements we had just created to highlight the lines. */
   var target = this.id.slice(1, this.id.length);
   d3.selectAll("#_temp_" + target).remove();
+  d3.selectAll("#subLabel").remove();
 }
-
 
 function setEventHandlers() {
   /* Set some event handlers for the window. */

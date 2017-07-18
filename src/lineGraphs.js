@@ -1,5 +1,45 @@
 var utils = require('./utils');
 
+function processMultiSubredditData(data) {
+  /* Take the data we load from the JSON, make it into something
+   * worthy of a line graph. */
+  var ro = {
+    maxPercent: 0,
+    minPercent: 100,
+    maxDate: new Date(1900, 0, 1),
+    minDate: new Date(2300, 0, 1),
+    reddits: [],
+    streams: {}
+  };
+ for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      // if this thing has a key like so:
+      ro.reddits.push(key);
+      ro.streams[key] = [];
+      for (var dateString in data[key].dates) {
+        if (data[key].dates.hasOwnProperty(dateString)) {
+          // Convert the dateString to a meaningful one
+          // Convert the data into a percentage
+          var obj = data[key].dates[dateString];
+          var dt = utils.dateFromWeekString(dateString);
+          var pct = (obj.total_deleted / obj.total) * 100;
+          if (dt < ro.minDate) { ro.minDate = dt; }
+          else if (dt > ro.maxDate) { ro.maxDate = dt; }
+          if (pct < ro.minPercent) { ro.minPercent = pct; }
+          else if (pct > ro.maxPercent) { ro.maxPercent = pct; }
+          ro.streams[key].push({
+            datetime: dt,
+            percentDeleted: pct
+          });
+        }
+      }
+      // Sort the array by the date value
+      ro.streams[key].sort(utils.compareDTDates);
+    }
+  }
+  return ro;
+}
+
 function renderDeletedLineGraph(targetElement, dataFile) {
   /* Generate a line graph of the selected data. */
   var svg = d3.select(targetElement),
@@ -10,6 +50,7 @@ function renderDeletedLineGraph(targetElement, dataFile) {
   /* We set the domains for both of these once we know more about the data. */
   var x = d3.scaleTime().range([1, width]);
   var y = d3.scaleLinear().rangeRound([height, 0]);
+  var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
@@ -27,69 +68,34 @@ function renderDeletedLineGraph(targetElement, dataFile) {
      * [reddits] => [date, value]
      * */
 
-    // TODO: Refactor to function, write some unit tests.
-    var streams = {};
-    var maxPercent = 0,
-      minPercent = 100,
-      maxDate = new Date(2000, 0, 1),
-      minDate = new Date(2020, 0, 1),
-      reddits = [];
-
-    for (var key in data) {
-      if (data.hasOwnProperty(key)) {
-        // if this thing has a key like so:
-        reddits.push(key);
-        streams[key] = [];
-        for (var dateString in data[key].dates) {
-          if (data[key].dates.hasOwnProperty(dateString)) {
-            // Convert the dateString to a meaningful one
-            // Convert the data into a percentage
-            var obj = data[key].dates[dateString];
-            var dt = utils.dateFromWeekString(dateString);
-            var pct = (obj.total_deleted / obj.total) * 100;
-            if (dt < minDate) { minDate = dt; }
-            else if (dt > maxDate) { maxDate = dt; }
-            if (pct < minPercent) { minPercent = pct; }
-            else if (pct > maxPercent) { maxPercent = pct; }
-            streams[key].push({
-              datetime: dt,
-              percentDeleted: pct
-            });
-          }
-        }
-        // Sort the array by the date value
-        streams[key].sort(utils.compareDTDates);
-      }
-    }
+    // pd == processed data
+    pd = processMultiSubredditData(data);
+    y.domain([0, pd.maxPercent]);
+    x.domain([pd.minDate, pd.maxDate]);
+    var vline = d3.line()
+      .x(function(d) { return x(d.datetime); })
+      .y(function(d) { return y(d.percentDeleted); });
 
     // To enable us to come back to this data later.
-    window.vdata = {};
-    window.vdata.streams = streams;
-    window.vdata.reddits = reddits;
-
-    y.domain([0, maxPercent]);
-    x.domain([minDate, maxDate]);
-
-    window.vdata.x = x;
-    window.vdata.y = y;
-
-    var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+    window.vdata = {
+      streams: pd.streams,
+      reddits: pd.reddits,
+      x: x,
+      y: y,
+      vline: vline
+    };
 
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
-    var vline = d3.line()
-      .x(function(d) { return x(d.datetime); })
-      .y(function(d) { return y(d.percentDeleted); });
-
-    for (var i = 0; i < reddits.length; i++) {
+    for (var i = 0; i < window.vdata.reddits.length; i++) {
       g.append("path")
-        .data([streams[reddits[i]]])
+        .data([window.vdata.streams[window.vdata.reddits[i]]])
         .attr("class", "line")
         .attr("d", vline)
-        .attr("id", "_"+reddits[i])
+        .attr("id", "_"+window.vdata.reddits[i])
         .style("stroke", colorScale(i % 20))
         .style("opacity", "0.5");
     }
