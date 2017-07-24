@@ -68,9 +68,11 @@ function renderMainGraphs() {
 }
 
 function renderLongevityGraphs() {
-  l.renderLongevityGraph("../data/reddit_longevity_the_donald.json", "#longevityGraph");
+  var l = require('./longevityGraphs');
+  l.renderLongevityGraph("#longevityGraph", "../data/reddit_big_test_longevity.json");
 }
 
+// TODO: Fix this horrible mess down here by importing specific library.  Will have to modify webpack config. :-(
 if (window.location.pathname === "/public/") {
   renderMainGraphs();
 } else if (window.location.pathname === "/public/longevity.html") {

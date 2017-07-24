@@ -11,60 +11,50 @@ function renderLongevityGraph(targetElement, dataFile) {
 
   /* We set the domains for both of these once we know more about the data. */
   var x = d3.scaleTime().range([1, width]);
-  var y = d3.scaleLinear().rangeRound([height, 0]);
-  var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
-
+  var y = d3.scaleLinear().rangeRound([height, 0]).domain([0, height]); // 1:1 mapping
+  var xFromData = utils.dateFromStringWithScale(x);
+  var randGenerator = d3.randomUniform(0, height);
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
   d3.json(dataFile, function(err, data) {
-    /* here what we are goto do is 
+    /* here what we are going to do here is this:
+     * Load the data, start plotting lines.  It should be in a fairly usable format.
      * */
-
     if (err) throw err;
-    
-    if (data.reddits !== undefined) { data = data.reddits; }
-    else { throw 'no reddit data.'; }
-    /* We have here the goal of loading the big JSON file and creating various streams of data.
-     * The data file is a set of dicts like so: "reddits" => subreddits => "dates" => [WW-YYYY] => [obj]
-     * Where OBJ looks like {total: x+y, total_deleted: x, total_not_delted: y}
-     *
-     * What we want is:
-     * [reddits] => [date, value]
-     * */
 
-    // pd == processed data
-    pd = processMultiSubredditData(data);
-    // y.domain([0, pd.maxPercent]);
-    y.domain([0, 35]);
     x.domain([pd.minDate, pd.maxDate]);
+
     var vline = d3.line()
       .x(function(d) { return x(d.datetime); })
       .y(function(d) { return y(d.percentDeleted); });
 
-    // To enable us to come back to this data later.
-    window.vdata = {
-      streams: pd.streams,
-      reddits: pd.reddits,
-      x: x,
-      y: y,
-      vline: vline
-    };
+    function makeLine(item) {
+      var maxRand = randGenerator();
+      return [
+        {
+          x: xFromData(item.start_date),
+          y: rand
+        },
+        {
+          x: xFromData(item.end_date),
+          y: rand
+        }
+      ];
+    }
 
     // X Axis
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
-    for (var i = 0; i < window.vdata.reddits.length; i++) {
+    data.foreach(function (i) {
       g.append("path")
-        .data([window.vdata.streams[window.vdata.reddits[i]]])
+        .data([makeLine(i)])
         .attr("class", "line")
         .attr("d", vline)
-        .attr("id", "_"+window.vdata.reddits[i])
-        .style("stroke", colorScale(i % 20))
-        .style("opacity", "0.5");
-    }
+        .style("stroke", "black");
+    });
 
     // Put a title on the graph
     g.append("g")
@@ -74,7 +64,7 @@ function renderLongevityGraph(targetElement, dataFile) {
         .attr("text-anchor", "beginning")
         .attr("font-family", "sans-serif")
         .attr("font-weight", "bold")
-        .text("Proportions of Deleted Comments by Week");
+        .text("How long do people stick around?");
 
     // Y Axis
     g.append("g")
