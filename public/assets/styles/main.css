@@ -1,0 +1,17 @@
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+.blah {
+    fill: black;
+}
+.deleted {
+    fill: red;
+}
+.deleted_weekly {
+  fill: #ef6b64;
+}
+.sampled {
+  fill: green;
+}
