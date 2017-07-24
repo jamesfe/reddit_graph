@@ -23,22 +23,23 @@ function renderLongevityGraph(targetElement, dataFile) {
      * */
     if (err) throw err;
 
-    x.domain([pd.minDate, pd.maxDate]);
+    // TODO: Calculate this
+    x.domain([utils.betterDate(2015, 1, 1), utils.betterDate(2017, 5, 1)]);
 
     var vline = d3.line()
-      .x(function(d) { return x(d.datetime); })
-      .y(function(d) { return y(d.percentDeleted); });
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; });
 
     function makeLine(item) {
       var maxRand = randGenerator();
       return [
         {
-          x: xFromData(item.start_date),
-          y: rand
+          x: xFromData({ date: item.start_date}),
+          y: maxRand
         },
         {
-          x: xFromData(item.end_date),
-          y: rand
+          x: xFromData({ date: item.end_date}),
+          y: maxRand
         }
       ];
     }
@@ -48,7 +49,7 @@ function renderLongevityGraph(targetElement, dataFile) {
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
-    data.foreach(function (i) {
+    data.forEach(function (i) {
       g.append("path")
         .data([makeLine(i)])
         .attr("class", "line")
