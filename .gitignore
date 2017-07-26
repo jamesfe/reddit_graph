@@ -3,3 +3,4 @@ data/
 matplotlib/
 node_modules/
 public/dist/*
+gist/
