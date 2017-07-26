@@ -24,7 +24,7 @@ function renderLongevityGraph(targetElement, dataFile) {
     if (err) throw err;
 
     // TODO: Calculate this
-    x.domain([utils.betterDate(2015, 1, 1), utils.betterDate(2017, 5, 1)]);
+    x.domain([utils.betterDate(2015, 12, 1), utils.betterDate(2017, 8, 1)]);
 
     var vline = d3.line()
       .x(function(d) { return d.x; })
@@ -32,6 +32,7 @@ function renderLongevityGraph(targetElement, dataFile) {
 
     function makeLine(item) {
       var maxRand = randGenerator();
+
       return [
         {
           x: xFromData({ date: item.start_date}),
@@ -54,7 +55,8 @@ function renderLongevityGraph(targetElement, dataFile) {
         .data([makeLine(i)])
         .attr("class", "line")
         .attr("d", vline)
-        .style("stroke", "black");
+        .style("stroke", "black")
+        .style("opacity", "0.01");
     });
 
     // Put a title on the graph
@@ -65,20 +67,8 @@ function renderLongevityGraph(targetElement, dataFile) {
         .attr("text-anchor", "beginning")
         .attr("font-family", "sans-serif")
         .attr("font-weight", "bold")
-        .text("How long do people stick around?");
-
-    // Y Axis
-    g.append("g")
-      .attr("transform", "translate(" + width + ", 0)")
-      .call(d3.axisRight(y).tickFormat(function(d) { return d + '%'; }))
-      .append("text")
-        .attr("transform", "rotate(270)")
-        .attr("text-anchor", "end")
-        .attr("font-size", "14")
-        .attr("y", -6)
-        .attr("fill", "#000000")
-        .text("Percent Comments Deleted");
-  });
+        .text("Commenter Longevity");
+   });
 }
 
 module.exports = {

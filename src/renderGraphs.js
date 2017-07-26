@@ -69,7 +69,7 @@ function renderMainGraphs() {
 
 function renderLongevityGraphs() {
   var l = require('./longevityGraphs');
-  l.renderLongevityGraph("#longevityGraph", "../data/longevity_sample_data.json");
+  l.renderLongevityGraph("#longevityGraph", "../data/large_longevity.json");
 }
 
 // TODO: Fix this horrible mess down here by importing specific library.  Will have to modify webpack config. :-(
