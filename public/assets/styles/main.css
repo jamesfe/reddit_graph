@@ -15,3 +15,9 @@
 .sampled {
   fill: green;
 }
+.longevityLine {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: .1px;
+}
+

@@ -1,30 +1,11 @@
 <html>
-<style>
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: .1px;
-}
-.blah {
-    fill: black;
-}
-.deleted {
-    fill: red;
-}
-.deleted_weekly {
-  fill: #ef6b64;
-}
-.sampled {
-  fill: green;
-}
-</style>
     <head>
         <title>Longevity Graphs</title>
+        <link href="./assets/styles/main.css" rel="stylesheet">
         <script src="https://d3js.org/d3.v4.min.js"></script>
     </head>
     <body>
         <svg id="longevityGraph" width="1000" height="400"></svg>
-      </body>
-    <!-- we put this after the svg declaration so it can access the elements after the DOM creates them -->
-        <script src="./dist/bundle.js"></script>
+    </body>
+    <script src="./dist/bundle.js"></script>
 </html>

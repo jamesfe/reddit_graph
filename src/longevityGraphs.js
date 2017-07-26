@@ -53,7 +53,7 @@ function renderLongevityGraph(targetElement, dataFile) {
     data.forEach(function (i) {
       g.append("path")
         .data([makeLine(i)])
-        .attr("class", "line")
+        .attr("class", "longevityLine")
         .attr("d", vline)
         .style("stroke", "black")
         .style("opacity", "0.01");
