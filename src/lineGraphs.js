@@ -90,15 +90,15 @@ function renderDeletedLineGraph(targetElement, dataFile) {
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
-    for (var i = 0; i < window.vdata.reddits.length; i++) {
+    window.vdata.reddits.forEach(function(c, i) {
       g.append("path")
-        .data([window.vdata.streams[window.vdata.reddits[i]]])
+        .data([window.vdata.streams[c]])
         .attr("class", "line")
         .attr("d", vline)
-        .attr("id", "_"+window.vdata.reddits[i])
+        .attr("id", "_"+c)
         .style("stroke", colorScale(i % 20))
         .style("opacity", "0.5");
-    }
+    });
 
     // Put a title on the graph
     g.append("g")
