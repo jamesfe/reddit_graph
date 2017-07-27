@@ -73,4 +73,4 @@ function renderLongevityGraph(targetElement, dataFile) {
 
 module.exports = {
   renderLongevityGraph: renderLongevityGraph
-}
+};

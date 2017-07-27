@@ -24,9 +24,9 @@ function processMultiSubredditData(data) {
           var dt = utils.dateFromWeekString(dateString);
           var pct = (obj.total_deleted / obj.total) * 100;
           if (dt < ro.minDate) { ro.minDate = dt; }
-          else if (dt > ro.maxDate) { ro.maxDate = dt; }
+          if (dt > ro.maxDate) { ro.maxDate = dt; }
           if (pct < ro.minPercent) { ro.minPercent = pct; }
-          else if (pct > ro.maxPercent) { ro.maxPercent = pct; }
+          if (pct > ro.maxPercent) { ro.maxPercent = pct; }
           ro.streams[key].push({
             datetime: dt,
             percentDeleted: pct
