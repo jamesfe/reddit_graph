@@ -125,5 +125,6 @@ function renderDeletedLineGraph(targetElement, dataFile) {
 }
 
 module.exports = {
-  renderDeletedLineGraph: renderDeletedLineGraph
+  renderDeletedLineGraph: renderDeletedLineGraph,
+  processMultiSubredditData: processMultiSubredditData
 };
