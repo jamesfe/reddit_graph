@@ -1,8 +1,13 @@
+/*
+ * Graphs that tell a story about how long users stay in this reddit.
+ * */
 
 var utils = require('./utils');
 
-
 function renderLongevityGraph(targetElement, dataFile) {
+  /* Quite frankly, this graph is not very informative although it was a nice effort at something
+   * artistic and pretty, it does not tell a story.  Once I have a better graph to replace it,
+   * I'm deleting this code. */
   /* Generate a line graph of the selected data. */
   var svg = d3.select(targetElement),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
@@ -71,6 +76,41 @@ function renderLongevityGraph(targetElement, dataFile) {
    });
 }
 
+function processToCountEndDates(data) {
+  /* our data looks like "[{start_date: dd-mm-yyyy, end_date: dd-mm-yyyy},...]"
+   * and we want to output something nicer. */
+
+  var extents = d3.extent(data, function(a) { return utils.dateFromString(a.end_date); });
+
+}
+
+function renderLastDayGraph(targetElement, dataFile) {
+  var svg = d3.select(targetElement),
+    margin = {top: 20, right: 50,bottom: 20, left: 30},
+    width = svg.attr("width") - margin.left - margin.right,
+    height = svg.attr("height") - margin.top - margin.bottom;
+
+  /* We set the domains for both of these once we know more about the data. */
+  var x = d3.scaleTime().range([1, width]);
+  var y = d3.scaleLinear().rangeRound([height, 0]).domain([0, height]); // 1:1 mapping
+  var xFromData = utils.dateFromStringWithScale(x);
+  var randGenerator = d3.randomUniform(0, height);
+  var g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
+  d3.json(dataFile, function(err, data) {
+    /* We want to find the earliest day someone leaves and the latest, create an array with the
+     * number of entries we are putting on the graph between them, and then increment counters up for every
+     * time somebody leaves.
+     *
+     * Dependency: May depend on the splitting function we do. */
+    var b = processToCountEndDates(data); 
+  });
+}
+
+
 module.exports = {
-  renderLongevityGraph: renderLongevityGraph
+  renderLongevityGraph: renderLongevityGraph,
+  renderLastDayGraph: renderLastDayGraph
+
 };

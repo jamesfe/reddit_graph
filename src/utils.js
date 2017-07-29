@@ -6,11 +6,18 @@ function betterDate(y, m, d) {
 function dateFromStringWithScale(x) {
   /* Return a function that transforms dates in form DD-MM-YYYY -> scaled values */
   return function(d) {
-    if (typeof(d.date) != "string") { throw "not a string"; }
-    d = d.date.split('-');
-    var b = x(betterDate(d[2], d[1], d[0]));
-    return b;
+    return x(dateFromString(d.date));
   };
+}
+
+function dateFromString(d) {
+  if (typeof(d) != "string") { throw "not a string"; }
+  d = d.split('-');
+  return betterDate(d[2], d[1], d[0]);
+}
+
+function isSameDay(dt1, dt2) {
+	return dt1.getDate() == dt2.getDate() && dt1.getMonth() == dt2.getMonth() && dt1.getFullYear() == dt2.getFullYear();
 }
 
 function getDateOfISOWeek(w, y) {
@@ -61,5 +68,7 @@ module.exports = {
   dateFromWeekStringWithScale: dateFromWeekStringWithScale,
   dateFromWeekString: dateFromWeekString,
   compareDates: compareDates,
-  compareDTDates: compareDTDates
+  compareDTDates: compareDTDates,
+  dateFromString: dateFromString,
+	isSameDay: isSameDay
 };
