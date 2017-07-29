@@ -62,6 +62,12 @@ function compareDates(keyA, keyB){
   return 0;
 }
 
+function numberOfDaysBetween(d1, d2) {
+  var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+  var diffDays = Math.round(Math.abs((d1.getTime() - d2.getTime())/(oneDay)));
+  return diffDays;
+}
+
 module.exports = {
   betterDate: betterDate,
   dateFromStringWithScale: dateFromStringWithScale,
@@ -70,5 +76,6 @@ module.exports = {
   compareDates: compareDates,
   compareDTDates: compareDTDates,
   dateFromString: dateFromString,
-	isSameDay: isSameDay
+	isSameDay: isSameDay,
+  numberOfDaysBetween: numberOfDaysBetween
 };
