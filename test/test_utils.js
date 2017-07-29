@@ -90,5 +90,11 @@ describe('Utils', function() {
     });
   });
 
+  describe('numberOfDaysBetween tests', function() {
+    it('should return the right number of days', function() {
+      // TODO
+    });
+  });
+
 });
 
