@@ -53,5 +53,42 @@ describe('Utils', function() {
 
   });
 
+  describe('isSameDay tests', function() {
+    it('should find the same dates to be the same day', function() {
+      assert.equal(true, utils.isSameDay(new Date(2017, 1, 1), new Date(2017, 1, 1)), "2017-1-1");
+      assert.equal(true, utils.isSameDay(new Date(2017, 1, 1), new Date(2017, 1, 1, 2)));
+      assert.equal(true, utils.isSameDay(new Date(2017, 1, 1), new Date(2017, 1, 1, 23)));
+      assert.equal(true, utils.isSameDay(new Date(2017, 1, 2), new Date(2017, 1, 1, 25)), "adding 25 hours");
+    });
+
+    it('should return false for different days', function() {
+      assert.equal(false, utils.isSameDay(new Date(2017, 1, 1), new Date(2017, 1, 2)), "2017-1-1");
+      assert.equal(false, utils.isSameDay(new Date(2017, 1, 1), new Date(2017, 1, 2)), "2017-1-1");
+      assert.equal(false, utils.isSameDay(new Date(2016, 1, 1), new Date(2017, 1, 1, 25)), "adding 25 hours, false");
+      assert.equal(false, utils.isSameDay(new Date(2017, 2, 1), new Date(2017, 1, 1, 25)), "adding 25 hours, false");
+    });
+  });
+
+  describe('dateFromString tests', function() {
+    it('should make a date from a string', function() {
+      var result = utils.dateFromString("22-1-1985")
+      assert.equal(typeof(result), 'object');
+      assert.equal(result instanceof Date, true);
+    });
+
+    it('should take only a string', function() {
+      assert.throws(
+        () => {
+          utils.dateFromString(1);
+        },
+        "not a string"
+      );
+    });
+
+    it('should return the right day', function() {
+      assert.equal(true, utils.isSameDay(utils.dateFromString("22-1-1985"), new Date(1985, 0, 22)));
+    });
+  });
+
 });
 
