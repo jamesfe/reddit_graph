@@ -35,11 +35,11 @@ function doAuthorGraph() {
       .call(d3.axisBottom(x));
 
    // Data
-    g.selectAll(".blah")
+    g.selectAll(".blackFill")
       .data(newData)
       .enter()
       .append("rect")
-        .attr("class", "blah")
+        .attr("class", "blackFill")
         .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value); } )
         .attr("width", bandwidth)

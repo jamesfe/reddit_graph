@@ -132,11 +132,11 @@ function doDeletedGraph() {
 
 
    // Show all the comments, then next we will overlay this with the deleted values.
-    g.selectAll(".blah")
+    g.selectAll(".blackFill")
       .data(newData)
       .enter()
       .append("rect")
-        .attr("class", "blah")
+        .attr("class", "blackFill")
         .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value.total); } )
         .attr("width", bandwidth)

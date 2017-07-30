@@ -35,15 +35,14 @@ function getDateOfISOWeek(w, y) {
 function dateFromWeekString(d) {
   /* Given a WW-YYYY return a date object */
   if (typeof(d) != "string") { throw "not a string"; }
-  d = d.split('-').map(function(blah) { return parseInt(blah); });
+  d = d.split('-').map(function(b) { return parseInt(b); });
   return getDateOfISOWeek(d[0], d[1]);
 }
 
 function dateFromWeekStringWithScale(x) {
   /* Return a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
-    if (typeof(d.date) != "string") { throw "not a string"; }
-    d = d.date.split('-').map(function(blah) { return parseInt(blah); });
+    d = dateFromWeekString(d.date);
     return x(getDateOfISOWeek(d[0], d[1]));
   };
 

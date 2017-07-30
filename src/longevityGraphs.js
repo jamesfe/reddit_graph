@@ -129,13 +129,12 @@ function renderLastDayGraph(targetElement, dataFile) {
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
-    // TODO: Get rid of blah
    // Data
-    g.selectAll(".blah")
+    g.selectAll(".blackFill")
       .data(dataArray)
       .enter()
       .append("rect")
-        .attr("class", "blah")
+        .attr("class", "blackFill")
         .attr("x", scaleFromText)
         .attr("y", function(d) { return y(d.value); } )
         .attr("width", bandwidth)
