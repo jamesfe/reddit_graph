@@ -11,6 +11,7 @@ function dateFromStringWithScale(x) {
 }
 
 function dateFromString(d) {
+  /* return a date from a DD-MM-YYYY string */
   if (typeof(d) != "string") { throw "not a string"; }
   d = d.split('-');
   return betterDate(d[2], d[1], d[0]);
