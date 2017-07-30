@@ -92,8 +92,18 @@ describe('Utils', function() {
 
   describe('numberOfDaysBetween tests', function() {
     it('should return the right number of days', function() {
-      // TODO
+      var res = utils.numberOfDaysBetween(new Date(2017, 1, 1), new Date(2017, 1, 14));
+      assert.equal(res, 13);
     });
+    it('should return 0 for the same day', function() {
+      var res = utils.numberOfDaysBetween(new Date(2017, 1, 1), new Date(2017, 1, 1));
+      assert.equal(res, 0);
+    });
+    it('should return positive for the previous days', function() {
+      var res = utils.numberOfDaysBetween(new Date(2017, 1, 15), new Date(2017, 1, 1));
+      assert.equal(res, 14);
+    });
+
   });
 
 });
