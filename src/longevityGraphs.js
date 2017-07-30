@@ -6,7 +6,10 @@ var utils = require('./utils');
 
 function processToCountEndDates(data, coolOff) {
   /* our data looks like "[{start_date: dd-mm-yyyy, end_date: dd-mm-yyyy},...]"
-   * and we want to output something nicer. */
+   * and we want to output something nicer. 
+  * coolOff is the number of elements we should cut off the back of the array since everyone makes a last post 
+  * toward the end of the dataset (we cannot see the future)
+  * */
   var dayArray = {};
   data.forEach(function(a) {
     if (dayArray[a.end_date] === undefined) {
@@ -21,9 +24,10 @@ function processToCountEndDates(data, coolOff) {
       dataAsArray.push({"date": key, "value": dayArray[key]});
     }
   }
-  return dataAsArray;
-  // TODO: Get rid of last element of array, optimize this?
-  // TODO: Find median time of last posting, possibly delete that
+  dataAsArray = dataAsArray.sort(function(d1, d2) {
+    return utils.compareDates(utils.dateFromString(d1.date), utils.dateFromString(d2.date));
+  });
+  return dataAsArray.slice(0, coolOff * -1);
 }
 
 function renderLastDayGraph(targetElement, dataFile) {
@@ -39,18 +43,16 @@ function renderLastDayGraph(targetElement, dataFile) {
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
   var scaleFromText = utils.dateFromStringWithScale(x);
 
-  // TODO: Fix this "majorly"
-  x.domain([utils.betterDate(2015, 12, 1), utils.betterDate(2017, 8, 1)]);
-  y.domain([0, 10000]);
-
   d3.json(dataFile, function(err, data) {
     /* We want to find the earliest day someone leaves and the latest, create an array with the
      * number of entries we are putting on the graph between them, and then increment counters up for every
      * time somebody leaves.
      *
      * Dependency: May depend on the splitting function we do. */
-    var dataArray = processToCountEndDates(data);
+    var dataArray = processToCountEndDates(data, 30);
     var bandwidth = (width / dataArray.length) - 1;
+    x.domain(d3.extent(dataArray, function(b) { return(utils.dateFromString(b.date)); }));
+    y.domain([0, d3.max(dataArray, function(b) { return(b.value); })]);
 
     // X Axis
     g.append("g")
@@ -68,7 +70,14 @@ function renderLastDayGraph(targetElement, dataFile) {
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - y(d.value); });
 
-    // TODO: Put in red dotted line with median posting
+    g.append("g")
+      .attr("transform", "translate(0, " + margin.top + ")")
+      .append("text")
+        .attr("font-size", "20")
+        .attr("text-anchor", "beginning")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "bold")
+        .text("Number of Users Making Last Post on This Day");
 
     // Y Axis
     g.append("g")
@@ -80,7 +89,7 @@ function renderLastDayGraph(targetElement, dataFile) {
         .attr("font-size", "14")
         .attr("y", -6)
         .attr("fill", "#000000")
-        .text("Departures Per Day");
+        .text("Number of Users");
   });
 }
 
