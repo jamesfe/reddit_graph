@@ -69,7 +69,6 @@ function renderMainGraphs() {
 
 function renderLongevityGraphs() {
   var l = require('./longevityGraphs');
-  // l.renderLongevityGraph("#longevityGraph", "../data/large_longevity.json"); // TODO get rid of this
   l.renderLastDayGraph("#lastDays", "../data/large_longevity.json");
 }
 
