@@ -4,3 +4,4 @@ matplotlib/
 node_modules/
 public/dist/*
 gist/
+.nyc_output/*
