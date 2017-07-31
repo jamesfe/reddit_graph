@@ -103,7 +103,6 @@ function doDeletedGraph() {
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
-
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
@@ -203,10 +202,26 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
         newData.push({"date": key, "value": data[key]});
       }
     }
-    var extents = d3.extent(newData, function(d) { return utils.dateFromWeekString(d.date); });
-    extents[1] = extents[1].getTime() + (7 * 3600 * 24 * 1000); // add a week as buffer
-    x.domain(extents);
-    var scaleFromText = utils.dateFromWeekStringWithScale(x);
+
+    var minCheckDate = new Date(2200, 1, 1);
+    var minDate = "";
+    var maxCheckDate = new Date(2000, 1, 1);
+    var maxDate = "";
+
+    newData.forEach(function(d) {
+      var dt = utils.dateFromWeekString(d.date);
+      if (dt < minCheckDate) {
+        minCheckDate = dt;
+        minDate = d.date;
+      }
+      if (dt > maxCheckDate) {
+        maxCheckDate = dt;
+        maxDate = d.date;
+      }
+    });
+
+    maxCheckDate = maxCheckDate.getTime() + (7 * 3600 * 24 * 1000); // add a week as buffer
+    x.domain([minCheckDate, maxCheckDate]);
 
     var bandwidth = (width / newData.length) - 1;
     // X Axis
@@ -220,7 +235,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
       .enter()
       .append("rect")
         .attr("class", "deleted_weekly")
-        .attr("x", scaleFromText)
+        .attr("x", utils.dateFromWeekStringWithScale(x))
         .attr("y", calcPercent)
         .attr("width", bandwidth)
         .attr("height", function(d) { return height - calcPercent(d); } );

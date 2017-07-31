@@ -43,10 +43,9 @@ function dateFromWeekString(d) {
 function dateFromWeekStringWithScale(x) {
   /* Return a function that transforms dates in form WW-YYYY -> scaled values */
   return function(d) {
-    d = dateFromWeekString(d.date);
-    return x(getDateOfISOWeek(d[0], d[1]));
+    realDate = dateFromWeekString(d.date);
+    return x(realDate);
   };
-
 }
 
 function compareDTDates(c, d) {

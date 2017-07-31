@@ -4,13 +4,28 @@ var authorGraph = require('./authorgraph');
 var deletedGraph = require('./deletedgraph');
 var lineGraphs = require('./lineGraphs');
 
+var dataFiles = {
+  the_donald: {
+    deleted: '../data/the_donald_deleted_until_01jun2017.json',
+    longevity: '../data/the_donald_longevity_until_01jun2017.json',
+    weekly: {
+      deleted: '../data/deleted_r_donald_1-2016_to_22-2017_by_week.json'
+    }
+  },
+  political: {
+    weekly: {
+      deleted: '../data/political_subreddits_deleted_by_week_19july2017.json'
+    }
+  },
+  allDeleted: '../data/total_by_deleted.json'
+};
+
 function renderMainGraphs() {
   authorGraph.renderAuthorGraph();
   deletedGraph.renderDeletedGraph();
-  deletedGraph.renderDeletedPercentGraph('#deletedDonaldPercent', '../data/total_by_deleted.json', null);
-  deletedGraph.doDeletedPercentGraphByWeek('#deletedDonaldPercentWeek', '../data/deleted_r_donald_1-2016_to_22-2017_by_week.json', null);
-
-  lineGraphs.renderDeletedLineGraph('#bigLineGraph', '../data/political_subreddits_deleted_by_week_19july2017.json');
+  deletedGraph.renderDeletedPercentGraph('#deletedDonaldPercent', dataFiles.allDeleted, null);
+  deletedGraph.doDeletedPercentGraphByWeek('#deletedDonaldPercentWeek', dataFiles.the_donald.weekly.deleted, null);
+  lineGraphs.renderDeletedLineGraph('#bigLineGraph', dataFiles.political.weekly.deleted);
 
   function drawDeletedLine(redditName, color) {
     /* Draw a thicker, more visible line on top when the mouse is over.. */
@@ -69,7 +84,7 @@ function renderMainGraphs() {
 
 function renderLongevityGraphs() {
   var l = require('./longevityGraphs');
-  l.renderLastDayGraph("#lastDays", "../data/large_longevity.json");
+  l.renderLastDayGraph("#lastDays", dataFiles.the_donald.longevity);
 }
 
 // TODO: Fix this horrible mess down here by importing specific library.  Will have to modify webpack config. :-(
