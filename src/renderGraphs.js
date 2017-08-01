@@ -6,7 +6,6 @@ var lineGraphs = require('./lineGraphs');
 
 var dataFiles = {
   the_donald: {
-    deleted: '../data/the_donald_deleted_until_01jun2017.json',
     longevity: '../data/the_donald_longevity_until_01jun2017.json',
     weekly: {
       deleted: '../data/deleted_r_donald_1-2016_to_22-2017_by_week.json'
@@ -21,8 +20,8 @@ var dataFiles = {
 };
 
 function renderMainGraphs() {
-  authorGraph.renderAuthorGraph();
-  deletedGraph.renderDeletedGraph();
+  authorGraph.renderAuthorGraph("#authorChart", "../data/author_count_per_day.json");
+  deletedGraph.renderDeletedGraph("#commentCount", dataFiles.allDeleted);
   deletedGraph.renderDeletedPercentGraph('#deletedDonaldPercent', dataFiles.allDeleted, null);
   deletedGraph.doDeletedPercentGraphByWeek('#deletedDonaldPercentWeek', dataFiles.the_donald.weekly.deleted, null);
   lineGraphs.renderDeletedLineGraph('#bigLineGraph', dataFiles.political.weekly.deleted);

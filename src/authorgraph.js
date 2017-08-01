@@ -1,8 +1,7 @@
 var utils = require('./utils');
 
-function doAuthorGraph() {
-  // some declarations
-  var svg = d3.select("#authorChart"),
+function renderAuthorGraph(targetElement, dataFile) {
+  var svg = d3.select(targetElement),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
@@ -14,7 +13,7 @@ function doAuthorGraph() {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-  d3.json("../data/author_count_per_day.json", function(err, data) {
+  d3.json(dataFile, function(err, data) {
     if (err) throw err;
 
     data = data.authors_per_day;
@@ -56,14 +55,9 @@ function doAuthorGraph() {
         .attr("y", -6)
         .attr("fill", "#000000")
         .text("Different Comment Authors");
-
-    console.log("Done");
-
   });
-
-  console.log("Done making author graph");
 }
 
 module.exports = {
-  renderAuthorGraph: doAuthorGraph
+  renderAuthorGraph: renderAuthorGraph
 };

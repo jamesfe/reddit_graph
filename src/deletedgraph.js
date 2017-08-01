@@ -97,9 +97,9 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
 
 }
 
-function doDeletedGraph() {
+function doDeletedGraph(targetElement, dataFile) {
   // some declarations
-  var svg = d3.select("#commentCount"),
+  var svg = d3.select(targetElement),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
@@ -110,7 +110,7 @@ function doDeletedGraph() {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-  d3.json("../data/total_by_deleted.json", function(err, data) {
+  d3.json(dataFile, function(err, data) {
     if (err) throw err;
 
     y.domain([0, d3.max(Object.values(data).map(function(c) { return c.total; }))]);
@@ -127,8 +127,6 @@ function doDeletedGraph() {
     g.append("g")
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
-    // I don't know why we have to use the "bad axis" here but it seems d3 is off by 1 for axis labels.
-
 
    // Show all the comments, then next we will overlay this with the deleted values.
     g.selectAll(".blackFill")
@@ -163,12 +161,7 @@ function doDeletedGraph() {
         .attr("y", -6)
         .attr("fill", "#000000")
         .text("Deleted Comments Per Day");
-
-    console.log("Done w/ comments");
-
   });
-
-  console.log("Done making deleted comments graph");
 }
 
 function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
