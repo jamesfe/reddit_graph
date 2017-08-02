@@ -5,7 +5,6 @@ function renderAuthorGraph(targetElement, dataFile) {
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
-
   var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([0, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
   var scaleFromText = utils.dateFromStringWithScale(x);
@@ -25,6 +24,7 @@ function renderAuthorGraph(targetElement, dataFile) {
         newData.push({"date": key, "value": data[key]});
       }
     }
+    x.domain(d3.extent(newData, function(a) { return utils.dateFromString(a.date); }));
     // create a bar width that has a gap of 1 px
     var bandwidth = (width / newData.length) - 1;
 

@@ -8,7 +8,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
+  var x = d3.scaleTime().range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var scaleFromText = utils.dateFromStringWithScale(x);
@@ -33,7 +33,7 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
         newData.push({"date": key, "value": data[key]});
       }
     }
-
+    x.domain(d3.extent(newData, function(a) { return utils.dateFromString(a.date); }));
     var bandwidth = (width / newData.length) - 1;
     // X Axis
     g.append("g")
@@ -97,13 +97,13 @@ function doDeletedPercentGraph(targetId, dataFile, dates) {
 
 }
 
-function doDeletedGraph(targetElement, dataFile) {
+function renderDeletedGraph(targetElement, dataFile) {
   // some declarations
   var svg = d3.select(targetElement),
     margin = {top: 20, right: 50,bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
-  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
+  var x = d3.scaleTime().range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var scaleFromText = utils.dateFromStringWithScale(x);
@@ -121,7 +121,7 @@ function doDeletedGraph(targetElement, dataFile) {
         newData.push({"date": key, "value": data[key]});
       }
     }
-
+    x.domain(d3.extent(newData, function(a) { return utils.dateFromString(a.date); }));
     var bandwidth = (width / newData.length) - 1;
     // X Axis
     g.append("g")
@@ -171,7 +171,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().domain([utils.betterDate(2016, 1, 1), utils.betterDate(2017, 5, 1)]).range([1, width]),
+  var x = d3.scaleTime().range([1, width]),
     y = d3.scaleLinear().rangeRound([height, 0]);
 
   var g = svg.append("g")
@@ -260,7 +260,7 @@ function doDeletedPercentGraphByWeek(targetId, dataFile, dates) {
 
 
 module.exports = {
-  renderDeletedGraph: doDeletedGraph,
+  renderDeletedGraph: renderDeletedGraph,
   renderDeletedPercentGraph: doDeletedPercentGraph,
   doDeletedPercentGraphByWeek: doDeletedPercentGraphByWeek
 };
