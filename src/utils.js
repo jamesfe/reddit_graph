@@ -12,7 +12,7 @@ function dateFromStringWithScale(x) {
 
 function dateFromString(d) {
   /* return a date from a DD-MM-YYYY string */
-  if (typeof(d) != "string") { throw "not a string"; }
+  if (typeof(d) != "string") { throw new Error("not a string"); }
   d = d.split('-');
   return betterDate(d[2], d[1], d[0]);
 }
@@ -35,7 +35,7 @@ function getDateOfISOWeek(w, y) {
 
 function dateFromWeekString(d) {
   /* Given a WW-YYYY return a date object */
-  if (typeof(d) != "string") { throw "not a string"; }
+  if (typeof(d) != "string") { throw new Error("not a string"); }
   d = d.split('-').map(function(b) { return parseInt(b); });
   return getDateOfISOWeek(d[0], d[1]);
 }

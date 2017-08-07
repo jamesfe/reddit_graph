@@ -33,7 +33,7 @@ describe('Utils', function() {
         () => {
           utils.dateFromWeekString(1);
         },
-        "not a string"
+        /not a string/
       );
     });
   });
@@ -81,7 +81,7 @@ describe('Utils', function() {
         () => {
           utils.dateFromString(1);
         },
-        "not a string"
+        /not a string/
       );
     });
 
