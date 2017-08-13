@@ -21,3 +21,12 @@
   stroke-width: .1px;
 }
 
+.grid line {
+  stroke-dasharray: 5, 5;
+  stroke-width: 1px;
+  stroke: lightgrey;
+}
+
+.grid path {
+  stroke-width: 0;
+}

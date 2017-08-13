@@ -90,6 +90,11 @@ function renderDeletedLineGraph(targetElement, dataFile) {
       .attr("transform", "translate(0, " + height + ")")
       .call(d3.axisBottom(x));
 
+    function make_y_axis() {
+      return d3.axisLeft(y)
+        .ticks(5);
+    }
+
     window.vdata.reddits.forEach(function(c, i) {
       g.append("path")
         .data([window.vdata.streams[c]])
@@ -121,6 +126,15 @@ function renderDeletedLineGraph(targetElement, dataFile) {
         .attr("y", -6)
         .attr("fill", "#000000")
         .text("Percent Comments Deleted");
+
+    // Lines across, extensions of the Y-Axis
+    svg.append("g")
+      .attr("transform", "translate(" + margin.left + ", " + margin.top + ")")
+      .attr("class", "grid")
+      .call(make_y_axis()
+        .tickSize(-width)
+        .tickFormat(""));
+
   });
 }
 
